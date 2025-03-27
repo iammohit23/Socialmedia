@@ -1,0 +1,98 @@
+                 <!DOCTYPE html>
+                 <html lang="en">
+                 <head>
+                     <meta charset="UTF-8">
+                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                     <title>Search Results - {{ query }}</title>
+                     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+                     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+                     <style>
+                         body {
+                             background-color: #f4f4f4;
+                         }
+                         .user-card {
+                             transition: transform 0.3s ease, box-shadow 0.3s ease;
+                             max-width: 300px;
+                             margin: auto;
+                         }
+                         .user-card:hover {
+                             transform: translateY(-5px);
+                             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                         }
+                     </style>
+                 </head>
+                 <body class="bg-gray-100">
+                     <div class="container mx-auto px-4 py-8">
+                         <div class="max-w-lg mx-auto"> 
+                             <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-center">
+                                     <h1 class="text-3xl font-bold text-white">
+                                         <i class="fas fa-search mr-3"></i>
+                                         Search result for : <span class="text-white-100">{{ query }}</span>
+                                     </h1>
+                                 </div>
+                                 <div class="p-6 text-center">
+                                     <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+                                         <i class="fas fa-users mr-2"></i>
+                                         User Profile
+                                     </h2>
+                                     {% if user_details %}
+    {% for user_info in user_details %}
+    <div class="user-card bg-white border border-gray-200 rounded-lg p-6 text-center shadow-sm">
+        <div class="mb-4 flex justify-center">
+            {% if user_info.profile.profileimg %}
+                <img src="{{ user_info.profile.profileimg.url }}" 
+                     alt="{{ user_info.profile.user.username }}'s profile" 
+                     class="w-24 h-24 rounded-full object-cover border-2 border-blue-200">
+            {% else %}
+                <img src="/path/to/default-avatar.png" 
+                     alt="Default Avatar" 
+                     class="w-24 h-24 rounded-full object-cover border-2 border-blue-200">
+            {% endif %}
+        </div>
+        
+        <a href="/profile/{{user_info.profile.user.username}}" 
+           class="text-lg font-bold text-blue-600 hover:text-blue-800 transition duration-300">
+           @{{user_info.profile.user.username}}
+        </a>
+        
+        {% if user_info.profile.bio %}
+            <p class="text-gray-600 mt-2 text-sm h-12 overflow-hidden">
+                {{ user_info.profile.bio|slice:":100" }}{% if user_info.profile.bio|length > 100 %}...{% endif %}
+            </p>
+        {% endif %}
+        
+        {% if user_info.profile.location %}
+            <p class="text-sm text-gray-500 mt-2">
+                <i class="fas fa-map-marker-alt mr-2"></i>{{ user_info.profile.location }}
+            </p>
+        {% endif %}
+        
+        <div class="flex justify-around mt-4 text-sm text-gray-700">
+            <div>
+                <i class="fas fa-images mr-2"></i>
+                Posts: {{ user_info.post_count }}
+            </div>
+            <div>
+                <i class="fas fa-users mr-2"></i>
+                Followers: {{ user_info.follower_count }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="text-center py-12 text-gray-500">
+        <i class="fas fa-ghost text-6xl mb-4"></i>
+        <p class="text-xl">No users found matching your search query.</p>
+    </div>
+{% endif %}
+                                     
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     
+
+                 </body>
+                 </html>
+                 
